@@ -3,9 +3,14 @@ import matplotlib as mpl
 import matplotlib.ticker as tick
 from matplotlib.ticker import FuncFormatter
 import pandas as pd
-import seaborn as sns
 import csv
+import random
+import seaborn as sns
 import numpy as np
+
+
+
+
 def main():
    
     data_bar = read_file("sample-bar.txt", ' ')
@@ -56,6 +61,8 @@ def plot_bar_graph(data, title, x_title, y_title):
 
 def plot_line_graph(data, title, x_title, y_title, line_labels):
     
+    markers = ['o', '|', '.', 'x', 's'] # some markers that can be used for lines 
+
     x = []
     y = [] 
     
@@ -65,7 +72,7 @@ def plot_line_graph(data, title, x_title, y_title, line_labels):
     for i in range(1, len(data[0])-1 ):
         for j in range(1, len(data)): # get the data of line j (column j) at row i 
             y.append(float(data[j][i]))
-        plt.plot(x, y, label =line_labels[i-1], marker='.')  #plot the line 
+        plt.plot(x, y, label =line_labels[i-1], marker=markers[i%len(markers)])  #plot the line 
         y = []
 
     # creating the bar plot
