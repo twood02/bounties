@@ -2,11 +2,8 @@ import matplotlib.pyplot as plt
 import matplotlib as mpl
 import matplotlib.ticker as tick
 from matplotlib.ticker import FuncFormatter
-import pandas as pd
 import csv
 import random
-import seaborn as sns
-import numpy as np
 
 
 
@@ -56,6 +53,8 @@ def plot_bar_graph(data, title, x_title, y_title):
     plt.xlabel(x_title)
     plt.ylabel(y_title)
     plt.title(title)
+    img_title= title.replace(' ', '-') #replace title spaces with dashes 
+    plt.savefig(img_title)
     plt.show()
   
 
@@ -88,6 +87,10 @@ def plot_line_graph(data, title, x_title, y_title, line_labels):
     plt.xlabel(x_title)
     plt.ylabel(y_title)
     plt.title(title)
+    img_title= title.replace(' ', '-') #replace title spaces with dashes 
+    if img_title == '':
+        img_title = "line-graph-figure"
+    plt.savefig(img_title)
     plt.show()
 
 if __name__ == "__main__":
