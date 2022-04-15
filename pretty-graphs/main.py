@@ -95,3 +95,4 @@ def plot_line_graph(data, title, x_title, y_title, line_labels):
 
 if __name__ == "__main__":
     main()
+
