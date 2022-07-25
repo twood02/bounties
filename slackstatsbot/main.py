@@ -1,3 +1,44 @@
+####################################################
+## A Python-based Slack bot to log messages sent
+## in monitored channels and output that data 
+## through a series of commands.
+####################################################
+## Function Descriptions:
+## message_sent - Logs each message into db
+## stats - Initial function on /stats command
+## user_function - User is tagged
+## help_function - Displays help message
+## channel_function - Channel is tagged
+## channel_parameters - Channel is tagged with dates
+## channel_parameters_admin - Shows full channel table
+## channel_parameters_not_admin - Returns one row of table
+## channel_no_parameters - Channel is tagged without dates
+## stats_function - No user or channel tagged
+## generate_dates - Caluculate dates for db lookup
+## line_function - Builds each line of table
+## generate_csv - Generates csv file for admin users
+## file_upload - Uploads and dm's csv files
+####################################################
+## Author: Gavin Blanchette
+## Copyright: Copyright 2022
+## License: MIT License
+## Version: 1.0
+## Email: gblanchette@gwu.edu
+####################################################
+## Directions:
+## Database must be generated using commented code
+## at bottom or use the empty main.db database
+## A Slack Bot must be created by end user and tokens set
+## Execute by running "python main.py"
+####################################################
+## TODO:
+## - Setup Flask server for endpoint connection rather
+## than socket connection.
+## - Enable public distribution
+## - Improve documentation and redesign command flow
+## - Host files on Flask Server rather than Slack
+####################################################
+
 import os
 from slack_bolt import App
 from slack_bolt.adapter.socket_mode import SocketModeHandler
@@ -10,8 +51,6 @@ import csv
 # Initializes app with bot token and socket mode handler
 app = App(token=os.environ.get("SLACK_TOKEN"))
 connection = sqlite3.connect("main.db", check_same_thread=False)
-
-
 
 @app.event("message")
 def message_sent(message, say):
@@ -46,7 +85,6 @@ def stats(body, ack, respond, command):
   except:
     respond("There was an error! Error Code: SM3")
 
-##Called when a user is tagged
 def user_function(respond, cursor, command, parameters):
   username = parameters[0].replace("@", "")
   result = app.client.users_info(user=command['user_id'])
@@ -86,7 +124,6 @@ def user_function(respond, cursor, command, parameters):
   else:
     respond("You must be an admin to tag a user!")
     
-##-------------Help Function
 def help_function(respond, command):
   result = app.client.users_info(user=command['user_id'])
   if result['user']['is_admin'] == True:
@@ -256,20 +293,6 @@ def channel_no_parameters(respond, cursor, command, id, channel):
   else:
     respond(intro + tabtable + "```")
 
-##Function used when neither a channel nor a user are specified
-def channel_messages(messages):
-  table = []
-  for message in messages:
-    channels = app.client.conversations_list()
-    for channel in channels['channels']:
-      if channel['id'] == message[3]:  ##Check if channel id matches the message channel id to get the name
-        name = channel['name']
-        table.append([name, message[4], message[2]])
-  return table
-
-
-
-##-------------User Functions
 
 def stats_function(respond, cursor, command):
     id = command['user_id']
@@ -290,9 +313,6 @@ def stats_function(respond, cursor, command):
     except:
         respond("There was an error! Error Code: SF1")
 
-
-
-##Function used to generate dates and lookup messages
 def generate_dates(cursor, start_date, end_date, start_sunday, weeks, same, user, id):
   user_week_list = []
   for x in range(weeks):
@@ -309,8 +329,6 @@ def generate_dates(cursor, start_date, end_date, start_sunday, weeks, same, user
       user_week_list.append([start_date.strftime("%Y-%m-%d") + " - " +end_date.strftime("%Y-%m-%d"), len(messages)])
   return user_week_list
 
-
-##Function used to generate each line in the table
 def line_function(name, weeks):
   line = []  ##used to keep track of each line
   csv_line = []
@@ -322,8 +340,6 @@ def line_function(name, weeks):
     csv_line.append(week[1])
   return line, csv_line
 
-
-##Function used to generate csv files
 def generate_csv(headers, table):
   with open('table.csv', 'w', newline='') as file:
     writer = csv.writer(file)
@@ -331,8 +347,6 @@ def generate_csv(headers, table):
     for row in table:
       writer.writerow(row)
 
-
-##Function used to upload and dm csv files
 def file_upload(command, respond, intro, tabtable):
   try:
     dm = app.client.conversations_open(users=command['user_id'])
@@ -345,7 +359,6 @@ def file_upload(command, respond, intro, tabtable):
   except:
     file = f"```\nYour file could not be uploaded."
     respond(intro + tabtable + file)
-
 
 if __name__ == "__main__":
   #c = connection.cursor()
