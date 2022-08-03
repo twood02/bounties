@@ -22,21 +22,20 @@
 ## Author: Gavin Blanchette
 ## Copyright: Copyright 2022
 ## License: MIT License
-## Version: 1.0
+## Version: 1.1
 ## Email: gblanchette@gwu.edu
 ####################################################
 ## Directions:
-## Database must be generated using commented code
+## For end user: Visit https://Slack-Bot.kenrosefire.repl.co
+## For developer: Database must be generated using commented code
 ## at bottom or use the empty main.db database
 ## A Slack Bot must be created by end user and tokens set
 ## Execute by running "python main.py"
 ####################################################
 ## TODO:
-## - Setup Flask server for endpoint connection rather
-## than socket connection.
-## - Enable public distribution
 ## - Improve documentation and redesign command flow
-## - Host files on Flask Server rather than Slack
+## - Add message length tracking
+## - Change message storage to not store message text
 ####################################################
 
 import os
