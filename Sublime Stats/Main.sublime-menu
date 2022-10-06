@@ -1,0 +1,8 @@
+[
+    {
+        "caption": "Sublime Stats",
+        "children": [
+            { "command": "stats", "caption": "View Stats", "mnemonic": "S" },
+        ]
+    }
+]
